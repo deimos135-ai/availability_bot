@@ -1,0 +1,12 @@
+app = "your-fly-app-name"
+primary_region = "fra"
+
+[build]
+
+[env]
+  TIMEZONE = "Europe/Kyiv"
+  WORKSHEET_NAME = "Дії по вузлам"
+  REPORT_LIMIT = "10"
+
+[processes]
+  app = "python -m app.main"
