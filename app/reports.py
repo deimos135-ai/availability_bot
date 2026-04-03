@@ -23,7 +23,6 @@ def normalize_date(value: str) -> str:
 
     day = parts[0].zfill(2)
     month = parts[1].zfill(2)
-
     return f"{day}.{month}"
 
 
@@ -37,24 +36,14 @@ def is_zero_duration(value: str) -> bool:
 
 
 def row_has_incident(row: list[str]) -> bool:
-    node = clean_text(row[1]) if len(row) > 1 else ""
-    place = clean_text(row[2]) if len(row) > 2 else ""
     time_off = clean_text(row[3]) if len(row) > 3 else ""
     time_on = clean_text(row[4]) if len(row) > 4 else ""
     downtime = clean_text(row[5]) if len(row) > 5 else ""
-    what_happened = clean_text(row[6]) if len(row) > 6 else ""
-    reason = clean_text(row[7]) if len(row) > 7 else ""
 
-    return any(
-        [
-            node,
-            place,
-            time_off,
-            time_on,
-            what_happened,
-            reason,
-            not is_zero_duration(downtime),
-        ]
+    return bool(
+        time_off
+        or time_on
+        or (downtime and not is_zero_duration(downtime))
     )
 
 
@@ -96,15 +85,16 @@ def format_incident(item: dict) -> str:
     downtime = escape(item["downtime"]) if item["downtime"] else "—"
 
     lines = [
-        f"• <b>Вузол зв’язку {node}</b> — <b>{place}</b>",
-        f"  не працював з <b>{time_off}</b> до <b>{time_on}</b>, час простою: <b>{downtime}</b>",
+        f"⚠️ <b>{node}</b> — <b>{place}</b>",
+        f"⏱ Відключення: <b>{time_off}</b> → <b>{time_on}</b>",
+        f"🕒 Простій: <b>{downtime}</b>",
     ]
 
     if item["what_happened"]:
-        lines.append(f"  Що сталось: {escape(item['what_happened'])}")
+        lines.append(f"📝 Що сталось: {escape(item['what_happened'])}")
 
     if item["reason"]:
-        lines.append(f"  Причина: {escape(item['reason'])}")
+        lines.append(f"🔧 Причина: {escape(item['reason'])}")
 
     return "\n".join(lines)
 
@@ -119,11 +109,11 @@ def build_daily_report() -> str:
 
     if not incidents:
         return (
-            f"<b>Звіт по доступності за {report_date}</b>\n\n"
-            "Аварійних випадків не зафіксовано, гарного вечора."
+            f"📡 <b>Звіт по доступності за {report_date}</b>\n\n"
+            "✅ Аварійних випадків не зафіксовано, гарного вечора."
         )
 
-    lines = [f"<b>Звіт по доступності за {report_date}</b>", ""]
+    lines = [f"📡 <b>Звіт по доступності за {report_date}</b>", ""]
 
     for item in incidents:
         lines.append(format_incident(item))
