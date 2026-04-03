@@ -11,3 +11,8 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
 
 TIMEZONE = os.getenv("TIMEZONE", "Europe/Kyiv").strip()
 WORKSHEET_NAME = os.getenv("WORKSHEET_NAME", "СІЧЕНЬ").strip()
+
+ALLOWED_CHAT_ID = os.getenv("ALLOWED_CHAT_ID", TELEGRAM_CHAT_ID).strip()
+
+DAILY_REPORT_HOUR = int(os.getenv("DAILY_REPORT_HOUR", "20"))
+DAILY_REPORT_MINUTE = int(os.getenv("DAILY_REPORT_MINUTE", "0"))
