@@ -1,12 +1,21 @@
-app = "your-fly-app-name"
+app = "availability_bot"
 primary_region = "fra"
 
 [build]
 
 [env]
   TIMEZONE = "Europe/Kyiv"
-  WORKSHEET_NAME = "Дії по вузлам"
-  REPORT_LIMIT = "10"
+  WORKSHEET_NAME = "СІЧЕНЬ"
+  DAILY_REPORT_HOUR = "20"
+  DAILY_REPORT_MINUTE = "0"
 
 [processes]
   app = "python -m app.main"
+
+[restart]
+  policy = "always"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
