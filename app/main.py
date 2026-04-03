@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from app.reports import build_accessibility_report
+from app.reports import build_daily_report
 from app.telegram_sender import send_message
 
 
@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    logger.info("Building report...")
-    text = build_accessibility_report()
+    logger.info("Building daily report...")
+    text = build_daily_report()
 
     logger.info("Sending message to Telegram...")
     send_message(text)
