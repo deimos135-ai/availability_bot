@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import logging
 
-from app.reports import build_daily_report
-from app.telegram_sender import send_message
+from app.bot import run_polling
+from app.scheduler import start_scheduler_in_background
 
 
 logging.basicConfig(
@@ -15,13 +15,11 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    logger.info("Building daily report...")
-    text = build_daily_report()
+    logger.info("Starting scheduler...")
+    start_scheduler_in_background()
 
-    logger.info("Sending message to Telegram...")
-    send_message(text)
-
-    logger.info("Done")
+    logger.info("Starting Telegram bot polling...")
+    run_polling()
 
 
 if __name__ == "__main__":
